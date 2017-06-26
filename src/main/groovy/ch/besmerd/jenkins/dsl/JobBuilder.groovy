@@ -4,7 +4,7 @@ import javaposse.jobdsl.dsl.Builder
 import javaposse.jobdsl.dsl.DslFactory
 import javaposse.jobdsl.dsl.Job
 
-abstract class JobBuilder {
+public class JobBuilder extends Builder {
 
     protected Job job
 
@@ -16,7 +16,7 @@ abstract class JobBuilder {
         // Standards for all jobs
         // TODO
 
-        // Additional configs
+        // Set additional configs
         runClosure(additionalConfig)
         job
     }
@@ -43,11 +43,7 @@ abstract class JobBuilder {
         FIVE_MINUTES('H/5 * * * *'),
         FIFTEEN_MINUTES('H/15 * * * *'),
         HOURLY('H * * * *'),
-        HOURLY_OFFICE_HOURS(),
-        MIDNIGHT(),
         DAILY('H H * * *'),
-        WEEKDAYS('H H(0-2) * * *'),
-        WEEKENDS(),
         WEEKLY('H H * * H'),
         MONTHLY('H H H * *')
     }
@@ -80,3 +76,4 @@ abstract class JobBuilder {
 
         }
     }
+}
