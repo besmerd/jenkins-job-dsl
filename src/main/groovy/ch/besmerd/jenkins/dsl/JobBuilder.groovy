@@ -2,6 +2,7 @@ package ch.besmerd.jenkins.dsl
 
 import javaposse.jobdsl.dsl.DslFactory
 import javaposse.jobdsl.dsl.Job
+import javaposse.jobdsl.dsl.helpers.scm.SvnCheckoutStrategy
 
 public class JobBuilder {
 
@@ -20,7 +21,6 @@ public class JobBuilder {
         job
     }
 
-    // Build your own closures to expand Job DSL
     private void runClosure(Closure runClosure) {
         // Create clone of closure for threading access
         Closure runClone = runClosure.clone()
@@ -34,43 +34,57 @@ public class JobBuilder {
         runClone()
     }
 
-    private void methodMissing(String name, argument) {
-        job.invokeMethod(name, (Object[]) argument)
+    private void methodMissing(String name, args) {
+        job.invokeMethod(name, (Object[]) args)
     }
 
     enum Cron {
-        FIVE_MINUTES('H/5 * * * *'),
-        FIFTEEN_MINUTES('H/15 * * * *'),
-        HOURLY('H * * * *'),
-        DAILY('H H * * *'),
-        WEEKLY('H H * * H'),
-        MONTHLY('H H H * *')
+
+        FIVE_MINUTES('H/5 * * * *', 'Once in five minutes'),
+        FIFTEEN_MINUTES('H/15 * * * *', 'Once in fifteen minutes'),
+        HOURLY('H * * * *', 'Once an hour'),
+        DAILY('H H * * *', 'Once a day'),
+        WEEKLY('H H * * H', 'Once a week'),
+        MONTHLY('H H H * *', 'Once a month')
+
+        final String tab, description
+
+        Cron(String tab, String description) {
+            this.tab = tab
+            this.description = description
+        }
+
+        String getSpec() {
+            return "$tab  # $description"
+        }
+
     }
 
     void cron(Cron c) {
         job.triggers {
-            cron(c.getTab())
+            cron(c.spec)
         }
     }
 
-    void git(String _url, String _branch, String credentialId) {
+    void git(String gitUrl, String credentialsId, String gitBranch = '**') {
         job.scm {
-            branch(_branch)
             git {
                 remote {
-                    credentials(credentialId)
-                    url(_url)
+                    credentials(credentialsId)
+                    url(gitUrl)
                 }
+                branch(gitBranch)
             }
         }
     }
 
-    void svn(String _url, String credentialId) {
+    void svn(String svnUrl, String credentialsId, SvnCheckoutStrategy strategy = SvnCheckoutStrategy.UPDATE_WITH_REVERT) {
         job.scm {
             svn {
-                locaiton(_url) {
-                    credentials(credentialId)
+                location(svnUrl) {
+                    credentials(credentialsId)
                 }
+                checkoutStrategy(strategy)
             }
 
         }
