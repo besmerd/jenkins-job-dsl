@@ -1,10 +1,9 @@
-package ch.besmerd.jenkins.dls
+package ch.besmerd.jenkins.dsl
 
-import javaposse.jobdsl.dsl.Builder
 import javaposse.jobdsl.dsl.DslFactory
 import javaposse.jobdsl.dsl.Job
 
-public class JobBuilder extends Builder {
+public class JobBuilder {
 
     protected Job job
 
