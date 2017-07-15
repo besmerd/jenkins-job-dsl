@@ -1,10 +1,13 @@
 package ch.besmerd.jenkins.dsl
 
-import ch.besmerd.jenkins.dsl.JobBuilder.Cron
+import ch.besmerd.jenkins.dsl.helpers.Cron
 import javaposse.jobdsl.dsl.Job
 import spock.lang.Specification
 
 class JobBuilderTest extends Specification {
+
+    static final String SCM_URL = 'https://example.com/repository'
+    static final String SCM_CREDENTIALS_ID = 'credentials'
 
     JobParentStub jobParent = new JobParentStub()
 
@@ -32,19 +35,16 @@ class JobBuilderTest extends Specification {
     }
 
     def 'simple git job'() {
-        String url = 'https://example.com/repo'
-        String credentialsId = 'credentials'
-
         setup:
         Job job = new JobBuilder(jobParent, 'myJob').with {
-            git(url, credentialsId)
+            git(SCM_URL, SCM_CREDENTIALS_ID)
         }
 
         expect:
         with(job.node) {
             scm.@class == ['hudson.plugins.git.GitSCM']
-            scm.userRemoteConfigs.'hudson.plugins.git.UserRemoteConfig'.url.text() == url
-            scm.userRemoteConfigs.'hudson.plugins.git.UserRemoteConfig'.credentialsId.text() == credentialsId
+            scm.userRemoteConfigs.'hudson.plugins.git.UserRemoteConfig'.url.text() == SCM_URL
+            scm.userRemoteConfigs.'hudson.plugins.git.UserRemoteConfig'.credentialsId.text() == SCM_CREDENTIALS_ID
             scm.branches.size() == 1
             scm.branches.'hudson.plugins.git.BranchSpec'.name.text() == '**'
         }
@@ -52,20 +52,17 @@ class JobBuilderTest extends Specification {
     }
 
     def 'simple svn job'() {
-        String url = 'https://example.com/repo'
-        String credentialsId = 'credentials'
-
         setup:
         Job job = new JobBuilder(jobParent, 'myJob').with {
-            svn(url, credentialsId)
+            svn(SCM_URL, SCM_CREDENTIALS_ID)
         }
 
         expect:
         with(job.node) {
             scm.@class == ['hudson.scm.SubversionSCM']
             scm.locations.size() == 1
-            scm.locations[0].'hudson.scm.SubversionSCM_-ModuleLocation'.remote[0].text() == url
-            scm.locations[0].'hudson.scm.SubversionSCM_-ModuleLocation'.credentialsId.text() == credentialsId
+            scm.locations[0].'hudson.scm.SubversionSCM_-ModuleLocation'.remote[0].text() == SCM_URL
+            scm.locations[0].'hudson.scm.SubversionSCM_-ModuleLocation'.credentialsId.text() == SCM_CREDENTIALS_ID
             scm.workspaceUpdater.@class == ['hudson.scm.subversion.UpdateWithRevertUpdater']
         }
 

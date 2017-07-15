@@ -1,5 +1,6 @@
 package ch.besmerd.jenkins.dsl
 
+import ch.besmerd.jenkins.dsl.helpers.Cron
 import javaposse.jobdsl.dsl.DslFactory
 import javaposse.jobdsl.dsl.Job
 import javaposse.jobdsl.dsl.helpers.scm.SvnCheckoutStrategy
@@ -38,28 +39,6 @@ public class JobBuilder {
         job.invokeMethod(name, (Object[]) args)
     }
 
-    enum Cron {
-
-        FIVE_MINUTES('H/5 * * * *', 'Once in five minutes'),
-        FIFTEEN_MINUTES('H/15 * * * *', 'Once in fifteen minutes'),
-        HOURLY('H * * * *', 'Once an hour'),
-        DAILY('H H * * *', 'Once a day'),
-        WEEKLY('H H * * H', 'Once a week'),
-        MONTHLY('H H H * *', 'Once a month')
-
-        final String tab, description
-
-        Cron(String tab, String description) {
-            this.tab = tab
-            this.description = description
-        }
-
-        String getSpec() {
-            return "$tab  # $description"
-        }
-
-    }
-
     void cron(Cron c) {
         job.triggers {
             cron(c.spec)
@@ -86,7 +65,6 @@ public class JobBuilder {
                 }
                 checkoutStrategy(strategy)
             }
-
         }
     }
 }
