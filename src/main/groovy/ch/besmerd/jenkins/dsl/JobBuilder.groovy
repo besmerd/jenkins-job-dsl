@@ -7,6 +7,8 @@ import javaposse.jobdsl.dsl.helpers.scm.SvnCheckoutStrategy
 
 public class JobBuilder {
 
+    static final String JDK_VERSION = '1.8.0_latest'
+
     protected Job job
 
     JobBuilder(DslFactory dslFactory, String jobName) {
@@ -15,7 +17,13 @@ public class JobBuilder {
 
     Job with(Closure additionalConfig) {
         // Standards for all jobs
-        // TODO
+        job.logRotator {
+            daysToKeep(2)
+            numToKeep(10)
+            artifactDaysToKeep(-1)
+            artifactNumToKeep(1)
+        }
+        job.jdk(JDK_VERSION)
 
         // Set additional configs
         runClosure(additionalConfig)
@@ -45,6 +53,12 @@ public class JobBuilder {
         }
     }
 
+    void cronScm(Cron c) {
+        job.triggers {
+            scm(c.spec)
+        }
+    }
+
     void git(String gitUrl, String credentialsId, String gitBranch = '**') {
         job.scm {
             git {
@@ -67,4 +81,5 @@ public class JobBuilder {
             }
         }
     }
+
 }

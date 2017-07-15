@@ -34,6 +34,21 @@ class JobBuilderTest extends Specification {
 
     }
 
+    def 'simple scm cron job'() {
+        setup:
+        Job job = new JobBuilder(jobParent, 'myJob').with {
+            cronScm(Cron.DAILY)
+        }
+
+        expect:
+        with(job.node) {
+            triggers.'hudson.triggers.SCMTrigger'
+            triggers.size() == 1
+            triggers[0].'hudson.triggers.SCMTrigger'.spec.text() == Cron.DAILY.spec
+        }
+
+    }
+
     def 'simple git job'() {
         setup:
         Job job = new JobBuilder(jobParent, 'myJob').with {
