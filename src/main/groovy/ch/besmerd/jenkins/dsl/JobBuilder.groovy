@@ -1,11 +1,12 @@
 package ch.besmerd.jenkins.dsl
 
 import ch.besmerd.jenkins.dsl.helpers.Cron
+import ch.besmerd.jenkins.dsl.Builder
 import javaposse.jobdsl.dsl.DslFactory
 import javaposse.jobdsl.dsl.Job
 import javaposse.jobdsl.dsl.helpers.scm.SvnCheckoutStrategy
 
-public class JobBuilder {
+public class JobBuilder extends Builder {
 
     static final String JDK_VERSION = '1.8.0_latest'
 
@@ -28,23 +29,6 @@ public class JobBuilder {
         // Set additional configs
         runClosure(additionalConfig)
         job
-    }
-
-    private void runClosure(Closure runClosure) {
-        // Create clone of closure for threading access
-        Closure runClone = runClosure.clone()
-
-        // Set delegate of closure to this builder and
-        // only use this builder as the closure delegate
-        runClone.delegate = this
-        runClone.resolveStrategy = Closure.DELEGATE_ONLY
-
-        // Run closure code
-        runClone()
-    }
-
-    private void methodMissing(String name, args) {
-        job.invokeMethod(name, (Object[]) args)
     }
 
     void cron(Cron c) {
