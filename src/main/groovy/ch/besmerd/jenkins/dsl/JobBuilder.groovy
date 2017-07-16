@@ -1,7 +1,7 @@
 package ch.besmerd.jenkins.dsl
 
-import ch.besmerd.jenkins.dsl.helpers.Cron
 import ch.besmerd.jenkins.dsl.Builder
+import ch.besmerd.jenkins.dsl.helpers.Cron
 import javaposse.jobdsl.dsl.DslFactory
 import javaposse.jobdsl.dsl.Job
 import javaposse.jobdsl.dsl.helpers.scm.SvnCheckoutStrategy

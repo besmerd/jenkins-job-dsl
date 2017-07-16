@@ -1,6 +1,6 @@
 package ch.besmerd.jenkins.dsl
 
-class Builder {
+abstract class Builder {
 
     protected void runClosure(Closure runClosure) {
         // Create clone of closure for threading access
