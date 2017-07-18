@@ -1,19 +1,16 @@
 package ch.besmerd.jenkins.dsl
 
-import ch.besmerd.jenkins.dsl.Builder
 import ch.besmerd.jenkins.dsl.helpers.Cron
 import javaposse.jobdsl.dsl.DslFactory
 import javaposse.jobdsl.dsl.Job
 import javaposse.jobdsl.dsl.helpers.scm.SvnCheckoutStrategy
 
-public class JobBuilder extends Builder {
+class JobBuilder extends Builder {
 
     static final String JDK_VERSION = '1.8.0_latest'
 
-    protected Job job
-
     JobBuilder(DslFactory dslFactory, String jobName) {
-        this.job = dslFactory.job(jobName)
+        job = dslFactory.job(jobName)
     }
 
     Job with(Closure additionalConfig) {

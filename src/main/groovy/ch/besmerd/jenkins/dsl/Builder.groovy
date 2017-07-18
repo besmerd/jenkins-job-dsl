@@ -1,6 +1,10 @@
 package ch.besmerd.jenkins.dsl
 
+import javaposse.jobdsl.dsl.Job
+
 abstract class Builder {
+
+    protected Job job
 
     protected void runClosure(Closure runClosure) {
         // Create clone of closure for threading access
