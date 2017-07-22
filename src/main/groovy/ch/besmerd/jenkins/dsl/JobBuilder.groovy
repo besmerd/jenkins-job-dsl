@@ -9,6 +9,10 @@ class JobBuilder extends Builder {
 
     static final String JDK_VERSION = '1.8.0_latest'
 
+    JobBuilder(Job job) {
+        this.job = job
+    }
+
     JobBuilder(DslFactory dslFactory, String jobName) {
         job = dslFactory.job(jobName)
     }

@@ -24,4 +24,16 @@ class MavenJobBuilder extends JobBuilder {
         job as MavenJob
     }
 
+    void mail(String _recipients, Boolean _dontNotifyEveryUnstableBuild = false,
+              Boolean _sendToIndividuals = false, Boolean _perModuleEmail = true) {
+        job.configure {
+            it / reporters << 'hudson.maven.reporters.MavenMailer' {
+                recipients(_recipients)
+                dontNotifyEveryUnstableBuild(_dontNotifyEveryUnstableBuild)
+                sendToIndividuals(_sendToIndividuals)
+                perModuleEmail(_perModuleEmail)
+            }
+        }
+    }
+
 }
