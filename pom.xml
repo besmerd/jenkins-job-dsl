@@ -10,6 +10,7 @@
 
     <properties>
         <lib.version.dslplugin>1.61</lib.version.dslplugin>
+        <lib.version.jenkins>2.12</lib.version.jenkins>
         <lib.version.groovy-all>2.4.7</lib.version.groovy-all>
         <lib.version.spock-core>1.1-groovy-2.4</lib.version.spock-core>
         <plg.version.maven-surefire-plugin>2.20</plg.version.maven-surefire-plugin>
@@ -25,9 +26,53 @@
                 <version>${lib.version.groovy-all}</version>
             </dependency>
             <dependency>
+                <groupId>org.jenkins-ci.main</groupId>
+                <artifactId>jenkins-core</artifactId>
+                <version>${lib.version.jenkins}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jenkins-ci.main</groupId>
+                <artifactId>jenkins-war</artifactId>
+                <version>${lib.version.jenkins}</version>
+                <type>war</type>
+            </dependency>
+            <dependency>
+                <groupId>org.jenkins-ci.main</groupId>
+                <artifactId>jenkins-war</artifactId>
+                <version>${lib.version.jenkins}</version>
+                <classifier>war-for-test</classifier>
+            </dependency>
+            <dependency>
+                <groupId>org.jenkins-ci.main</groupId>
+                <artifactId>jenkins-war</artifactId>
+                <version>${lib.version.jenkins}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jenkins-ci.main</groupId>
+                <artifactId>jenkins-test-harness</artifactId>
+                <version>2.8</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jenkins-ci.plugins</groupId>
+                <artifactId>job-dsl</artifactId>
+                <version>${lib.version.dslplugin}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.jenkins-ci.plugins</groupId>
                 <artifactId>job-dsl-core</artifactId>
                 <version>${lib.version.dslplugin}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jenkins-ci.plugins</groupId>
+                <artifactId>structs</artifactId>
+                <version>1.2</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jenkins-ci.plugins</groupId>
+                <artifactId>cloudbees-folder</artifactId>
+                <version>5.0</version>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.spockframework</groupId>
@@ -44,8 +89,40 @@
             <artifactId>groovy-all</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.jenkins-ci.main</groupId>
+            <artifactId>jenkins-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jenkins-ci.main</groupId>
+            <artifactId>jenkins-war</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.jenkins-ci.main</groupId>
+            <artifactId>jenkins-war</artifactId>
+            <classifier>war-for-test</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.jenkins-ci.main</groupId>
+            <artifactId>jenkins-test-harness</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jenkins-ci.plugins</groupId>
+            <artifactId>job-dsl</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.jenkins-ci.plugins</groupId>
             <artifactId>job-dsl-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jenkins-ci.plugins</groupId>
+            <artifactId>structs</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jenkins-ci.plugins</groupId>
+            <artifactId>cloudbees-folder</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.spockframework</groupId>
@@ -108,6 +185,22 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- preinstall necessary jenkins plugins -->
+            <plugin>
+                <groupId>org.jenkins-ci.tools</groupId>
+                <artifactId>maven-hpi-plugin</artifactId>
+                <version>1.121</version>
+                <executions>
+                    <execution>
+                        <id>resolve-test-dependencies</id>
+                        <phase>process-test-resources</phase>
+                        <goals>
+                            <goal>resolve-test-dependencies</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
 
