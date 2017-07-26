@@ -20,7 +20,7 @@ enum Cron {
     }
 
     String getSpec() {
-        return "$tab  # $description"
+        return "# $description\n$tab"
     }
 
 }
